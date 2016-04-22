@@ -26,8 +26,10 @@ int main(int argc, char** argv)
 		printf("~");
 	if (depth == 1)
 		printf("%s", i_midpath);
-	if (depth <= 1)
+	if (depth <= 1) {
+		printf("\n");
 		return 0;
+	}
 	char *short_dirs = malloc(sizeof(char) * (2 * (depth - 1) + 1));
 	for (char *i = i_midpath, *j = short_dirs; i < i_basename; i++)
 		if (*i == '/') {
