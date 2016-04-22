@@ -24,7 +24,9 @@ int main(int argc, char** argv)
 	// print prefix
 	if (sub_home)
 		printf("~");
-	if (depth == 0)
+	if (depth == 1)
+		printf("%s", i_midpath);
+	if (depth <= 1)
 		return 0;
 	char *short_dirs = malloc(sizeof(char) * (2 * (depth - 1) + 1));
 	for (char *i = i_midpath, *j = short_dirs; i < i_basename; i++)
