@@ -31,12 +31,13 @@ int main(int argc, char** argv)
 		return 0;
 	}
 	char *short_dirs = malloc(sizeof(char) * (2 * (depth - 1) + 1));
-	for (char *i = i_midpath, *j = short_dirs; i < i_basename; i++)
+	char *short_dirs_i = short_dirs;
+	for (char *i = i_midpath; i < i_basename; i++)
 		if (*i == '/') {
-			*(j++) = '/';
-			*(j++) = *(++i);
+			*(short_dirs_i++) = '/';
+			*(short_dirs_i++) = *(++i);
 		}
-	*(short_dirs + 2 * (depth - 1)) = '\0';
+	*short_dirs_i = '\0';
 	printf("%s%s\n", short_dirs, i_basename);
 	free(short_dirs);
 }
