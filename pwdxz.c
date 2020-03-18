@@ -3,41 +3,56 @@
 #include <stdlib.h>
 #include <string.h>
 
+char * next_token(char *s, char const del)
+{
+	static char *olds;
+	if (s == NULL)
+		s = olds;
+	while (*s == del)
+		s++;
+	char *token = s;
+	while (*s != '\0' && *(++s) != del);
+	if (*s == del) {
+		*s = '\0';
+		olds = s+1;
+	} else
+		olds = s;
+	return token;
+}
+
 int main(int argc, char** argv)
 {
 	char *home = getenv("HOME");
 	size_t l_home = strlen(home);
-	char *cwd = argc > 1 ? argv[1] : getenv("PWD");
+	char *cwd = strdup(argc > 1 ? argv[1] : getenv("PWD"));
 	// is cwd a subdirectory of home ?
 	bool sub_home = memcmp(home, cwd, l_home) == 0;
 	// number of directories below root/home
 	int depth = 0;
-	// index of last slash
-	char *i_basename = cwd;
 	// index of path after base dir
-	char *i_midpath = cwd + (sub_home ? l_home : 0);
-	for (char *i = i_midpath; *i; i++)
-		if (*i == '/') {
-			i_basename = i;
+	char *subpath = cwd + (sub_home ? l_home : 0);
+	for (char *i = subpath; *i; i++)
+		if (*i == '/')
 			++depth;
-		}
 	// print prefix
 	if (sub_home)
 		printf("~");
 	if (depth == 1)
-		printf("%s", i_midpath);
+		printf("%s", subpath);
 	if (depth <= 1) {
 		printf("\n");
 		return 0;
 	}
-	char *short_dirs = malloc(sizeof(char) * (2 * (depth - 1) + 1));
+	char *short_dirs = subpath;
 	char *short_dirs_i = short_dirs;
-	for (char *i = i_midpath; i < i_basename; i++)
-		if (*i == '/') {
-			*(short_dirs_i++) = '/';
-			*(short_dirs_i++) = *(++i);
-		}
+	char *dir = next_token(subpath, '/');
+	int i = 0;
+	while (i++ < depth-1 && *dir != '\0') {
+		*(short_dirs_i++) = '/';
+		*(short_dirs_i++) = *dir;
+		dir = next_token(NULL, '/');
+	}
 	*short_dirs_i = '\0';
-	printf("%s%s\n", short_dirs, i_basename);
-	free(short_dirs);
+	printf("%s/%s\n", short_dirs, dir);
+	free(cwd);
 }
