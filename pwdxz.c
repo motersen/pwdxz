@@ -10,6 +10,10 @@ char * next_token(char *s, char const del)
 		s = olds;
 	while (*s == del)
 		s++;
+	if (*s == '\0') {
+		olds = s;
+		return NULL;
+	}
 	char *token = s;
 	while (*s != '\0' && *(++s) != del);
 	if (*s == del) {
@@ -47,7 +51,7 @@ int main(int argc, char** argv)
 	char *short_dirs_i = short_dirs;
 	char *dir = next_token(subpath, '/');
 	int i = 0;
-	while (i++ < depth-1 && *dir != '\0') {
+	while (i++ < depth-1 && dir != NULL) {
 		*(short_dirs_i++) = '/';
 		*(short_dirs_i++) = *dir;
 		dir = next_token(NULL, '/');
