@@ -2,15 +2,15 @@ CC=gcc
 DESTDIR=$(HOME)
 CFLAGS=-O3 -Wall
 
-pwdxz: pwdxz.c
-	$(CC) $(CFLAGS) -o pwdxz pwdxz.c
+sb: shortbread.c
+	$(CC) $(CFLAGS) -o sb shortbread.c
 
-install: pwdxz
-	strip pwdxz
-	install -Dm755 pwdxz $(DESTDIR)/bin/pwdxz
+install: sb
+	strip sb
+	install -Dm755 sb $(DESTDIR)/bin/sb
 
 uninstall:
-	rm -rf $(DESTDIR)/bin/pwdxz
+	rm -rf $(DESTDIR)/bin/sb
 
 clean:
-	rm -rf pwdxz
+	rm -rf sb
