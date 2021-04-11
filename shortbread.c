@@ -58,6 +58,10 @@ int main(int argc, char** argv)
 		// print hidden and special (.|..) paths unambiguously
 		if (*dir == '.' && *(++dir) != '\0')
 			goto add_char;
+		if (*(dir+1) >> 7) {
+			dir++;
+			goto add_char;
+		}
 		dir = next_token(NULL, '/');
 	}
 	*short_dirs_i = '\0';
